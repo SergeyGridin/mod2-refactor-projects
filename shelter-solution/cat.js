@@ -8,7 +8,7 @@ class Cat extends Animal {
   }
 
   isEvil() {
-    return !!this._evil;
+    return this._evil;
   }
 
   please() {
@@ -18,9 +18,13 @@ class Cat extends Animal {
   speak() {
     if (this.isEvil()) {
       return "I am an evil cat! I am not going to speak unless you feed me!";
-    } else {
-      return super.speak();
     }
+    return super.speak();
+  }
+  
+  checkAnimal() {
+    super.checkAnimal();
+    console.log(`${this.getName()} is very ${this.isEvil() ? "evil" : "good"}.`)
   }
 
   feed() {

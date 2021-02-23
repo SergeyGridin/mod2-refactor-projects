@@ -1,9 +1,8 @@
 class Animal {
-  constructor(name, age, hungry) {
+  constructor(name, age, hungry=false) {
     this._name = name;
     this._age = age;
     this._hungry = hungry;
-    this._clean = true;
   }
 
   getAge() {
@@ -15,7 +14,7 @@ class Animal {
   }
 
   isHungry() {
-    return !!this._hungry;
+    return this._hungry;
   }
 
   makeSound() {
@@ -29,9 +28,20 @@ class Animal {
   feed() {
     this._hungry = false;
   }
+  
+  checkAnimal() {
+    const hunger = this.isHungry() ? `hungry` : `well-fed`;
+    console.log(`${this.getName()} is ${hunger}.`)
+  }
 
-  clean() {
-    this._clean = true;
+  static checkAnimals(animals) {
+    animals.forEach((animal) => {
+      if (!(animal instanceof Animal)) {
+        throw new Error(`${animal} is not an animal!`);
+      } else {
+        animal.checkAnimal()
+      }
+    });
   }
 
   static feedAnimals(animals) {
@@ -44,15 +54,6 @@ class Animal {
     });
   }
 
-  static cleanAnimals(animals) {
-    animals.forEach((animal) => {
-      if (!(animal instanceof Animal)) {
-        throw new Error(`${animal} is not an animal!`);
-      } else {
-        animal.clean();
-      }
-    });
-  }
 }
 
 module.exports = Animal;

@@ -4,7 +4,7 @@ const Animal = require("./animal");
 class Shelter {
   constructor() {
     this._animals = [];
-    this._adoptions = [];
+    this._applications = [];
   }
 
   getAnimals() {
@@ -18,12 +18,13 @@ class Shelter {
     this._animals.push(animal);
   }
 
-  addAdoption(adoption) {
-    if (!(adoption instanceof Application)) {
+  addApplication(application) {
+    if (!(application instanceof Application)) {
       throw new Error(
-        "only instances of Application class can be added as adoptions"
+        "only instances of Application class can be added as applications"
       );
     }
+    this._applications.push(application)
   }
 
   introduceAnimals() {
@@ -35,7 +36,7 @@ class Shelter {
 
   receiveAnimal(animal) {
     this.addAnimal(animal);
-    console.log(`the shelter received a new animal, ${animal.name}`);
+    console.log(`the shelter received a new animal, ${animal.getName()}`);
   }
 
   removeAnimal(animalToBeAdopted) {
@@ -44,7 +45,7 @@ class Shelter {
     });
   }
 
-  processAdoption(animal, user) {
+  processApplication(animal, user) {
     this.removeAnimal(animal);
     user.adoptPet(animal);
   }
@@ -53,10 +54,10 @@ class Shelter {
     let animal = this.findAnimal(animalName);
     let app = new Application(animal, user);
     if (app.isValid()) {
-      this.addAdoption(app);
-      this.processAdoption(animal, user);
+      this.addApplication(app);
+      this.processApplication(animal, user);
     } else {
-      console.log(`sorry ${user.name}, you're not old enough to adopt`);
+      console.log(`sorry ${user.getName()}, you're not old enough to adopt`);
     }
   }
 

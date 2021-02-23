@@ -38,11 +38,6 @@ class Dog extends Animal {
     });
   }
 
-  speak() {
-    let superString = super.speak();
-    return `woof woof ${superString}`;
-  }
-
   static performTricks(dogs) {
     dogs.forEach((dog) => {
       if (!(dog instanceof Dog)) {
