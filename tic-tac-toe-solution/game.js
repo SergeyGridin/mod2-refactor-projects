@@ -13,7 +13,7 @@ class TicTacToeGame {
   }
 
   playTurn() {
-    // console.clear();
+    console.clear();
     this.displayStatus();
     this.currentPlayer.getMove((pos) => this.processMove(pos));
   }
@@ -33,7 +33,7 @@ class TicTacToeGame {
   }
 
   processMove(pos) {
-    console.clear();
+    // console.clear();
 
     if (this.board.isValidMove(pos)) {
       this.board.addToken(pos, this.currentPlayer.playerSymbol);
@@ -46,7 +46,7 @@ class TicTacToeGame {
       if (this.turns === 9) {
         return this.processDraw();
       } else {
-        this.currentPlayer = this.turns % 2 === 0 ? this.player2 : this.player1;
+        this.currentPlayer = this.turns % 2 === 0 ? this.player1 : this.player2;
         this.playTurn();
       }
     } else {
@@ -56,13 +56,13 @@ class TicTacToeGame {
   }
 
   processGameOver() {
-    return console.log(
-      this.board.winner + ' wins in ' + this.turns + ' turns!'
-    );
+    this.board.display();
+    return console.log(`\n${this.board.winner} wins in ${this.turns} turns!`);
   }
 
   processDraw() {
-    return console.log("The game is over and it's a draw!");
+    this.board.display();
+    return console.log("\nThe game is over and it's a draw!");
   }
 
   saveGameState() {

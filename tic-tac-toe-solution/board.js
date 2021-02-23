@@ -7,29 +7,25 @@ class Board {
 
   updateLayout(row) {
     // update layout to display
-    // consider refactoring
-    if (row === 1) {
-      this.layout = `${this.displaySymbol(this.grid[0])} | `;
-      this.layout += `${this.displaySymbol(this.grid[1])} | `;
-      this.layout += `${this.displaySymbol(this.grid[2])}\n`;
-      this.layout += `---------\n`;
-    } else if (row === 2) {
-      this.layout += `${this.displaySymbol(this.grid[3])} | `;
-      this.layout += `${this.displaySymbol(this.grid[4])} | `;
-      this.layout += `${this.displaySymbol(this.grid[5])}\n`;
-      this.layout += `---------\n`;
-    } else if (row === 3) {
-      this.layout += `${this.displaySymbol(this.grid[6])} | `;
-      this.layout += `${this.displaySymbol(this.grid[7])} | `;
-      this.layout += `${this.displaySymbol(this.grid[8])}\n`;
+    this.layout = '\n';
+    for (let i = 0; i < 9; i++) {
+      // After the last columns of each row we need to add horizontal lines
+      if (i === 2 || i === 5 || i === 8) {
+        this.layout += `${this.displaySymbol(this.grid[i])}\n`;
+
+        // To make sure we don't add a horizontal line after last row
+        i !== 8 ? (this.layout += `---------\n`) : '';
+
+        // continue will stop the current iteration, but keep looping
+        continue;
+      }
+      this.layout += `${this.displaySymbol(this.grid[i])} | `;
     }
   }
 
   display() {
     // Update board and render to user
-    for (let row = 1; row <= 3; row++) {
-      this.updateLayout(row);
-    }
+    this.updateLayout();
     console.log(this.layout);
   }
 
