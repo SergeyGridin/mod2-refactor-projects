@@ -17,6 +17,10 @@ describe('TicTacToeGame constructor', () => {
     game = new TicTacToeGame(player1, player2, 'test');
   });
 
+  afterEach('Close readline instance', () => {
+    game.rl.close();
+  });
+
   it('should have player1 property', () => {
     let expected = 'player1';
 
