@@ -101,10 +101,10 @@ describe('Board class', () => {
     expect(board).to.have.property(expected);
   });
 
-  it('should have a layout property', () => {
-    let expected = 'layout';
+  it('should have a render method', () => {
+    let test = board.render;
 
-    expect(board).to.have.property(expected);
+    expect(test).to.exist;
   });
 
   it('should have a winner property', () => {
