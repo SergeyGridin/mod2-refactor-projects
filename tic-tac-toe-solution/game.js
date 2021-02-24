@@ -11,14 +11,17 @@ class TicTacToeGame {
     this.board = new Board();
     this.turns = 0;
     this.rl = readline.createInterface(process.stdin, process.stdout);
-    this.loadGameState();
   }
 
   playTurn() {
     const readline = this.rl;
     console.clear();
     this.displayStatus();
-    this.currentPlayer.getMove((pos) => this.processMove(pos), readline);
+    try {
+      this.currentPlayer.getMove((pos) => this.processMove(pos), readline);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   displayStatus() {
@@ -49,7 +52,11 @@ class TicTacToeGame {
     // console.clear();
 
     if (this.board.isValidMove(pos)) {
-      this.board.addToken(pos, this.currentPlayer.playerSymbol);
+      try {
+        this.board.addToken(pos, this.currentPlayer.playerSymbol);
+      } catch (e) {
+        console.log(e);
+      }
       this.turns++;
       // Check for win
       if (this.board.checkForWin()) {
@@ -123,6 +130,10 @@ class TicTacToeGame {
       this.updateGame(state);
       this.playTurn();
     });
+  }
+
+  start() {
+    this.loadGameState();
   }
 }
 
