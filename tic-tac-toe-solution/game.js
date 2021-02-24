@@ -27,12 +27,22 @@ class TicTacToeGame {
   }
 
   updateGame(state) {
-    console.log('Loading saved game...\n');
-    this.currentPlayer =
-      state.currentPlayerSymbol === 'x' ? this.player1 : this.player2;
-    this.board.grid = state.grid;
-    this.turns = state.turns;
-    this.playTurn();
+    this.rl.question(
+      "Save found. Enter 'new' if you want to start a new game\n> ",
+      (answer) => {
+        console.log(answer);
+        if (answer.toLowerCase() === 'new') {
+          return this.playTurn();
+        } else {
+          console.log('Loading saved game...\n');
+          this.currentPlayer =
+            state.currentPlayerSymbol === 'x' ? this.player1 : this.player2;
+          this.board.grid = state.grid;
+          this.turns = state.turns;
+          this.playTurn();
+        }
+      }
+    );
   }
 
   processMove(pos) {
