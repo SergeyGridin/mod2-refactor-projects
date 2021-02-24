@@ -94,11 +94,11 @@ const employee3 = new Employee('Juniper', 'Serbia', airport, 30, false);
 // console.log(employee1);
 // console.log(employee2);
 
-// Testing getYearlySalary
+//// Testing getYearlySalary
 // employee1.getYearlySalary();
 // employee2.getYearlySalary();
 
-// Testing Employee.compareSalaries
-Employee.compareSalaries(employee1, employee2);
-Employee.compareSalaries(employee2, employee1);
-Employee.compareSalaries(employee2, employee3);
+// // Testing Employee.compareSalaries
+// Employee.compareSalaries(employee1, employee2);
+// Employee.compareSalaries(employee2, employee1);
+// Employee.compareSalaries(employee2, employee3);
