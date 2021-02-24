@@ -5,7 +5,7 @@ class Board {
     this.winner = '';
   }
 
-  updateLayout(row) {
+  updateLayout() {
     // update layout to display
     this.layout = '\n';
     for (let i = 0; i < 9; i++) {
@@ -37,7 +37,6 @@ class Board {
   // Determine if move is valid
   isValidMove(pos) {
     // Make sure they chose a spot on the board
-    // Possibly throw an error here
     if (pos < 0 || pos > 8) return false;
 
     // Make sure the position is not already taken
@@ -49,6 +48,8 @@ class Board {
 
   // Add token to our board
   addToken(pos, token) {
+    if (typeof pos !== 'number') throw new TypeError('pos must be a number!');
+
     this.grid[pos] = token;
   }
 
