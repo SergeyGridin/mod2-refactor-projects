@@ -6,7 +6,6 @@ class ComputerPlayer {
   getMove(processMove) {
     // Choose random location on board to try
     let randomMove = Math.floor(Math.random() * 9);
-    console.log('processing computer move');
     processMove(randomMove);
   }
 }

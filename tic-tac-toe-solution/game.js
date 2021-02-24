@@ -1,5 +1,7 @@
 const Board = require('./board');
 const fs = require('fs');
+const readline = require('readline');
+const HumanPlayer = require('./humanPlayer');
 
 class TicTacToeGame {
   constructor(player1, player2) {
@@ -8,14 +10,15 @@ class TicTacToeGame {
     this.currentPlayer = player1;
     this.board = new Board();
     this.turns = 0;
-    this.gameStatus = '';
+    this.rl = readline.createInterface(process.stdin, process.stdout);
     this.loadGameState();
   }
 
   playTurn() {
+    const readline = this.rl;
     console.clear();
     this.displayStatus();
-    this.currentPlayer.getMove((pos) => this.processMove(pos));
+    this.currentPlayer.getMove((pos) => this.processMove(pos), readline);
   }
 
   displayStatus() {
@@ -28,7 +31,7 @@ class TicTacToeGame {
     this.currentPlayer =
       state.currentPlayerSymbol === 'x' ? this.player1 : this.player2;
     this.board.grid = state.grid;
-    this.gameStatus = state.gameStatus;
+    this.turns = state.turns;
     this.playTurn();
   }
 
@@ -47,6 +50,7 @@ class TicTacToeGame {
         return this.processDraw();
       } else {
         this.currentPlayer = this.turns % 2 === 0 ? this.player1 : this.player2;
+        this.saveGameState();
         this.playTurn();
       }
     } else {
@@ -57,23 +61,29 @@ class TicTacToeGame {
 
   processGameOver() {
     this.board.display();
-    return console.log(`\n${this.board.winner} wins in ${this.turns} turns!`);
+    console.log(`\n${this.board.winner} wins in ${this.turns} turns!`);
+
+    // Close readlines
+    this.rl.close();
   }
 
   processDraw() {
     this.board.display();
-    return console.log("\nThe game is over and it's a draw!");
+    console.log("\nThe game is over and it's a draw!");
+
+    // Close readlines
+    this.rl.close();
   }
 
   saveGameState() {
     // Create a POJO from our current game state
     const grid = this.board.grid;
     const currentPlayerSymbol = this.currentPlayer.playerSymbol;
-    const gameStatus = this.gameStatus;
+    const turns = this.turns;
     const state = {
       currentPlayerSymbol,
       grid,
-      gameStatus,
+      turns,
     };
 
     // Stringify our POJO
