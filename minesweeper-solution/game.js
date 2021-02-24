@@ -1,5 +1,7 @@
 const readline = require("readline");
+const fs = require("fs");
 const Board = require("./board");
+const getCircularReplacer = require("./utils/getCircularReplacer");
 
 class Game {
   static LAYOUTS = Object.freeze({
@@ -13,9 +15,11 @@ class Game {
       throw new Error("Invalid size for the board!");
     }
 
-    let { gridSize, numBombs } = Game.LAYOUTS[size];
-    this._board = new Board(gridSize, numBombs);
+    // without saving game state
+    // let { gridSize, numBombs } = Game.LAYOUTS[size];
+    // this._board = new Board(gridSize, numBombs);
     this._rl = readline.createInterface(process.stdin, process.stdout);
+    this._loadGameState(size);
   }
 
   get board() {
@@ -34,10 +38,11 @@ class Game {
     Example of an input: f,0,0 \n\n`;
 
     this.rl.question(question, (answer) => {
+      console.clear();
+
       const [action, row, col] = answer.split(",").map((input) => input.trim());
 
       if (!(this._isValidAction(action) && this._isValidMove(row, col))) {
-        console.clear();
         console.log("Invalid action or move! Try again!");
         this.play();
         return;
@@ -53,7 +58,7 @@ class Game {
         console.log("You Lost");
         process.exit(0);
       }
-      console.clear();
+
       this.play();
     });
   }
@@ -84,9 +89,38 @@ class Game {
         tile.explore();
         break;
       case "s":
-        //save
+        this._saveState();
+        console.log("Game saved!");
         break;
     }
+  }
+
+  _saveState() {
+    const state = JSON.stringify(this.board, getCircularReplacer()); // need to use a helper to stringify an object with circular reference
+    fs.writeFileSync("./minesweeper.json", state, (err) => {
+      if (err) {
+        throw new Error("Something went wrong in writing the file!");
+      }
+    });
+  }
+
+  _loadGameState(size) {
+    // Check if file exists
+    fs.access("./minesweeper.json", fs.constants.F_OK, (err) => {
+      if (err) {
+        console.log("Save file does not exist, starting new game...\n");
+        let { gridSize, numBombs } = Game.LAYOUTS[size];
+        this._board = new Board(gridSize, numBombs);
+        return this.play();
+      }
+
+      // If file does exist, we need to read it
+      let gameState = fs.readFileSync("./minesweeper.json");
+      const boardState = JSON.parse(gameState);
+      const board = Board.loadBoard(boardState);
+      this._board = board;
+      return this.play();
+    });
   }
 }
 

@@ -18,6 +18,17 @@ class Tile {
     this._flagged = false;
   }
 
+  static loadTile(board, tileState) {
+    const { _pos, _bombed, _explored, _flagged } = tileState;
+    const tile = new Tile(board);
+    tile._board = board;
+    tile._pos = _pos;
+    tile._bombed = _bombed;
+    tile._explored = _explored;
+    tile._flagged = _flagged;
+    return tile;
+  }
+
   get adjacentBombCount() {
     return this.neighbors.filter((tile) => tile.isBombed).length;
   }

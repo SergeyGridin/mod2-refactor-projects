@@ -1,11 +1,29 @@
 const Tile = require("./tile");
 
 class Board {
-  constructor(gridSize, numBombs) {
+  constructor(gridSize, numBombs, loading = false) {
     this._gridSize = gridSize;
     this._numBombs = numBombs;
 
-    this._generateBoard();
+    if (!loading) this._generateBoard();
+  }
+
+  static loadBoard(boardState) {
+    const board = new Board(boardState._gridSize, boardState._numBombs, true);
+
+    const grid = [];
+    boardState._grid.forEach((rowState) => {
+      let row = [];
+      rowState.forEach((tileState) => {
+        const tile = Tile.loadTile(board, tileState);
+        row.push(tile);
+      });
+      grid.push(row);
+    });
+
+    board._grid = grid;
+
+    return board;
   }
 
   get grid() {
@@ -37,7 +55,6 @@ class Board {
         });
       })
     );
-    // .join("\n");
   }
 
   reveal() {
