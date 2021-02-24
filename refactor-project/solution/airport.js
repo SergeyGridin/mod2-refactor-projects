@@ -1,5 +1,5 @@
-const Plane = require('./plane.js');
-
+const Employee = require('./employee');
+const Plane = require('./plane');
 class Airport {
   constructor() {
     this._planes = [];
@@ -70,12 +70,20 @@ class Airport {
 
   // Add employee to airport
   addEmployee(employee) {
+    if (!(employee instanceof Employee)) {
+      throw new Error('Must provide a employee as an argument!');
+    }
     this.employees.push(employee);
   }
 
   // Add employees to airport
   addEmployees(employees) {
-    employees.forEach((employee) => this.addEmployee(employee));
+    employees.forEach((employee) => {
+      if (!(employee instanceof Employee)) {
+        throw new Error('Must provide a employee as an argument!');
+      }
+      this.addEmployee(employee);
+    });
   }
 
   // List employees of airport

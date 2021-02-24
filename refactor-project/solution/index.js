@@ -12,11 +12,12 @@ const person1 = new Person('Michael Shuff', 'Florida');
 const person2 = new Person('Sergey Gridin', 'Toronto');
 const person3 = new Person('Ali Kim', 'Maryland');
 const airport = new Airport();
+const airport2 = new Airport();
 
 /******  AIRPORT TESTING ******/
 // Testing addPlane and addPlanes
-// airport.addPlane(plane1);
-// airport.addPlane(plane2);
+airport.addPlane(plane1);
+airport.addPlane(plane2);
 // airport.addPlanes([plane1, plane2]);
 
 // // Testing getters
@@ -69,6 +70,9 @@ const passenger1 = new Passenger('Michael', 'Florida', airport, 'Pennsylvania');
 const passenger2 = new Passenger('Sergey', 'Toronto', airport, 'Russia');
 const passenger3 = new Passenger('Ali', 'Maryland', airport, 'Hawaii');
 // console.log(passenger1.destination);
+// console.log(passenger1);
+// passenger1.enterAirport(airport2);
+// console.log(passenger1);
 
 // // Testing Passenger.compareTickets and destination setter
 // Passenger.compareTickets(passenger1, passenger2);
@@ -90,9 +94,14 @@ const passenger3 = new Passenger('Ali', 'Maryland', airport, 'Hawaii');
 const employee1 = new Employee('John', 'Pennsylvania', airport, 20, true);
 const employee2 = new Employee('Mary', 'Wisconsin', airport, 30, false);
 const employee3 = new Employee('Juniper', 'Serbia', airport, 30, false);
-
 // console.log(employee1);
 // console.log(employee2);
+
+// // testing airport addEmployee and addEmployees methods
+// airport.addEmployee(employee1);
+// // airport.addEmployee(passenger1); // Throws error
+// airport.addEmployees([employee2, employee3]);
+// console.log(airport);
 
 //// Testing getYearlySalary
 // employee1.getYearlySalary();

@@ -1,3 +1,4 @@
+const Airport = require('./airport');
 const Person = require('./person');
 
 class Passenger extends Person {
@@ -10,6 +11,10 @@ class Passenger extends Person {
 
   get airport() {
     return this._airport;
+  }
+
+  set airport(airport) {
+    this._airport = airport;
   }
 
   get destination() {
@@ -37,6 +42,13 @@ class Passenger extends Person {
     } else {
       console.log(`We are not going to the same place`);
     }
+  }
+
+  enterAirport(airport) {
+    if (!(airport instanceof Airport)) {
+      throw new Error('Must provide an Airport class instance as an argument!');
+    }
+    this.airport = airport;
   }
 
   boardPlane() {

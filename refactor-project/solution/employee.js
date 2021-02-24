@@ -1,3 +1,4 @@
+const Airport = require('./airport');
 const Person = require('./person');
 
 class Employee extends Person {
