@@ -1,32 +1,26 @@
 class Board {
   constructor() {
     this.grid = Array(9).fill('');
-    this.layout = '';
     this.winner = '';
   }
 
-  updateLayout() {
+  render() {
     // update layout to display
-    this.layout = '\n';
+    let layout = '\n';
     for (let i = 0; i < 9; i++) {
       // After the last columns of each row we need to add horizontal lines
       if (i === 2 || i === 5 || i === 8) {
-        this.layout += `${this.displaySymbol(this.grid[i])}\n`;
+        layout += `${this.displaySymbol(this.grid[i])}\n`;
 
         // To make sure we don't add a horizontal line after last row
-        i !== 8 ? (this.layout += `---------\n`) : '';
+        i !== 8 ? (layout += `---------\n`) : '';
 
         // continue will stop the current iteration, but keep looping
         continue;
       }
-      this.layout += `${this.displaySymbol(this.grid[i])} | `;
+      layout += `${this.displaySymbol(this.grid[i])} | `;
     }
-  }
-
-  display() {
-    // Update board and render to user
-    this.updateLayout();
-    console.log(this.layout);
+    console.log(layout);
   }
 
   // Return either an empty space or the player's symbol

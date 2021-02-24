@@ -25,7 +25,7 @@ class TicTacToeGame {
   }
 
   displayStatus() {
-    this.board.display();
+    this.board.render();
     console.log('*******************************');
   }
 
@@ -77,7 +77,7 @@ class TicTacToeGame {
   }
 
   processGameOver() {
-    this.board.display();
+    this.board.render();
     console.log(`\n${this.board.winner} wins in ${this.turns} turns!`);
 
     // Close readlines
@@ -85,7 +85,7 @@ class TicTacToeGame {
   }
 
   processDraw() {
-    this.board.display();
+    this.board.render();
     console.log("\nThe game is over and it's a draw!");
 
     // Close readlines
@@ -120,7 +120,7 @@ class TicTacToeGame {
     fs.access('./ttt.json', fs.constants.F_OK, (err) => {
       if (err) {
         console.log('Save file does not exist, starting new game...\n');
-        this.board.display();
+        this.board.render();
         return this.playTurn();
       }
 
