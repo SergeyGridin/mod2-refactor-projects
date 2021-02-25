@@ -19,7 +19,7 @@ class TicTacToeGame {
     console.clear();
     this.displayStatus();
     try {
-      // Alternatively, we can remove like 14 from the constructor with the bind method and pass this.processMove through an anonymous call back
+      // Alternatively, we can remove like 14 from the constructor with the bind method and pass this.processMove through an anonymous callback
       // (pos) => this.processMove(pos) as the first argument of getMove
       this.currentPlayer.getMove(this.processMove, readline);
     } catch (e) {
