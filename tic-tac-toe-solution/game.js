@@ -11,6 +11,7 @@ class TicTacToeGame {
     this.board = new Board();
     this.turns = 0;
     this.rl = readline.createInterface(process.stdin, process.stdout);
+    this.processMove = this.processMove.bind(this);
   }
 
   playTurn() {
@@ -18,7 +19,9 @@ class TicTacToeGame {
     console.clear();
     this.displayStatus();
     try {
-      this.currentPlayer.getMove((pos) => this.processMove(pos), readline);
+      // Alternatively, we can remove like 14 from the constructor with the bind method and pass this.processMove through an anonymous call back
+      // (pos) => this.processMove(pos) as the first argument of getMove
+      this.currentPlayer.getMove(this.processMove, readline);
     } catch (e) {
       console.log(e);
     }

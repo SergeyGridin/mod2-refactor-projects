@@ -6,4 +6,4 @@ const player1 = new HumanPlayer();
 const player2 = new HumanPlayer('o');
 const player3 = new ComputerPlayer();
 const game = new TicTacToeGame(player1, player2);
-// game.start();
+game.start();
