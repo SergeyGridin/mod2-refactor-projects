@@ -6,7 +6,9 @@ class Person {
   }
 
   introduce() {
-    return `Hi, I'm ${this.first} ${this.last}, and I'm ${this.age} years old.`;
+    console.log(
+      `Hi, I'm ${this.first} ${this.last}, and I'm ${this.age} years old.`
+    );
   }
 
   static introducePeople(people) {
@@ -16,7 +18,7 @@ class Person {
     people.forEach((person) => {
       if (!(person instanceof Person))
         throw new Error('All items in array must be Person class instances.');
-      console.log(person.introduce());
+      person.introduce();
     });
   }
 }
@@ -26,12 +28,6 @@ class Student extends Person {
     super(first, last, age);
     this.major = major;
     this.GPA = GPA;
-  }
-
-  introduce() {
-    let introduction = super.introduce();
-    introduction += ` My major is ${this.major} and my GPA is ${this.GPA}`;
-    console.log(introduction);
   }
 
   static compareGPA(student1, student2) {
@@ -47,8 +43,7 @@ class Student extends Person {
 
 // let person1 = new Person('Michael', 'Shuff', 33);
 // let person2 = new Person('Michael', 'Jordan', 58);
-
-// console.log(person1.introduce());
+// person1.introduce();
 // Person.introducePeople([person1, person2]);
 
 // let student1 = new Student('Sergey', 'Gridin', '24', 'Mathematics', '3.9');
