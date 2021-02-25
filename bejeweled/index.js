@@ -81,8 +81,11 @@ class Bejeweled {
               console.log("OOP! Inputs don't make any combos.")
 
             } else {
-              this.showMatches();
-              this.updateScore();
+              while (this.board.checkGridMatches()) {
+                
+                this.showMatches();
+                this.updateScore();
+              }
             }
           }
           this.promptUser()
@@ -121,7 +124,6 @@ class Bejeweled {
     for (let i = 0; i < this.board.rowCount; i++) {
       console.log("    " + (i + 1) + " " + this.board.getRow(i).join(" "))
     }
-    this.showMatches()
     console.log("\n")
   }
 

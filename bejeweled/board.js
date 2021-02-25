@@ -1,7 +1,7 @@
 // "🍊", "🍌", "🍎", "🍑", "🍒"
 
 class Board {
-  constructor(rowCount = 8, colCount = 8, gems = ["🍇", "🍈", "🍊", "🍌", "🍎", "🍑", "🍒"]) {
+  constructor(rowCount = 8, colCount = 8, gems = ["🍇", "🍈", "🥥", "🍌", "🍎"]) {
     this.colChars = ["A", "B", "C", "D", "E", "F", "H", "I", "J", "K", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "Z", "W", "X", "Y", "Z"].slice(0, colCount);
     this.rowCount = rowCount
     this.gems = gems;
@@ -50,15 +50,17 @@ class Board {
   }
 
   checkGridMatches() {
-    let matches = new Set()
+    let matches = []
 
     this.colChars.forEach((char) => {
       for (let ri = 0; ri < this.rowCount; ri++) {
         const currentMatches = this.checkRowColMatches(char, ri)
-        if (currentMatches) currentMatches.forEach(match=>matches.add(match))
+        if (currentMatches) matches.push(...currentMatches)
       }
     })
-    if (matches.size) return Array.from(matches)
+    let uniqueMatches = Array.from(new Set(matches.map(match=>match.join(""))))
+    uniqueMatches = uniqueMatches.map(match=>match.split(""))
+    if (uniqueMatches.length) return uniqueMatches;
     else return false
   }
 
@@ -83,6 +85,16 @@ class Board {
       this.grid[char] = this.grid[char].filter(gem => gem !== null);
       this.addGems(this.grid[char])
     })
+    return matches.length
+  }
+  
+  calculateBoard() {
+    let score = 0;
+    while (this.checkGridMatches()) {
+      const matches = this.checkGridMatches();
+      score += this.updateBoardGems(matches);
+    }
+    return score;
   }
 
   swapGems(coordA, coordB) {
@@ -109,16 +121,9 @@ class Board {
     const adjacentNums = [coordA[0], coordA[0]+1, coordA[0]-1]
     if (aIndex > 0) adjacentChars += this.colChars[aIndex-1]
     if (aIndex < this.colChars.length-1) adjacentChars += this.colChars[aIndex+1]
-    console.log("chars", adjacentChars, coordA, coordB)
     
-    if (!adjacentChars.includes(coordB[1])) {
-      console.log("not adjacent char")
-      return false;
-    }
-    if (!adjacentNums.includes(coordB[0])) {
-      console.log("not adjacent number")
-      return false;
-    }
+    if (!adjacentChars.includes(coordB[1])) return false;
+    if (!adjacentNums.includes(coordB[0])) return false;
     return true;
   }
 }
@@ -127,7 +132,5 @@ module.exports = Board;
 
 
 // TODO
-// Cancel unadjacent inputs with msg
-// Cancel inputs that don't result in a match with msg
 // Calculate score and auto-update with auto-combos
 // Check if no valid swaps are possible - game over
