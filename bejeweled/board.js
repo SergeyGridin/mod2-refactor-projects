@@ -2,111 +2,132 @@
 
 class Board {
   constructor(rowCount = 8, colCount = 8, gems = ["🍇", "🍈", "🍊", "🍌", "🍎", "🍑", "🍒"]) {
-    this.rowChars = ["A", "B", "C", "D", "E", "F", "H", "I", "J", "K", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "Z", "W", "X", "Y", "Z"].slice(0, rowCount);
-    this.colNums = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"].slice(0, colCount);
+    this.colChars = ["A", "B", "C", "D", "E", "F", "H", "I", "J", "K", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "Z", "W", "X", "Y", "Z"].slice(0, colCount);
+    this.rowCount = rowCount
     this.gems = gems;
-    this.columns = this.generateColumns()
-  }
-
-  generateColumns() {
-    const columns = []
-    for (let ci = 0; ci < this.colNums.length; ci++) {
-      const gemCol = []
-      for (let ri = 0; ri < this.rowChars.length; ri++) {
-        gemCol.push(this.gems[Math.floor(Math.random() * this.gems.length)])
-      }
-      columns.push(gemCol)
+    this.grid = this.generateGrid()
+    while (this.checkGridMatches()) {
+      this.grid = this.generateGrid()
     }
-    return columns;
-  }
-  
-  getRow(ri) { 
-    return this.columns.map(col => col[ri]) 
   }
 
-  checkRowColMatches(gem) {
+  generateGrid() {
+    const grid = {}
+    for (let ri = 0; ri < this.rowCount; ri++) {
+      const gemColumn = []
+      this.addGems(gemColumn)
+      grid[this.colChars[ri]] = gemColumn
+    }
+    return grid;
+  }
+
+  getRow(ri) {
+    return this.colChars.map(char => this.grid[char][ri])
+  }
+
+  checkArrayMatch(arr, i) {
+    const gem = arr[i];
+    let count = 1;
+    const matches = [i]
+    while (gem === arr[i + count]) {
+      matches.push(i + count)
+      count++
+    }
+    if (matches.length >= 3) return matches;
+    else return false;
+  }
+
+  checkRowColMatches(char, ri) {
     const matches = []
-    const ris = gem.checkMatch(this.getRow(gem.row), gem.column)
-    if (ris) matches.push(...ris.map(ri => [this.rowChars[gem.row], ri+1]))
+    const ris = this.checkArrayMatch(this.grid[char], ri)
+    if (ris) matches.push(...ris.map(i => [i + 1, char]))
 
-    const cis = gem.checkMatch(this.columns[gem.column], gem.row)
-    if (cis) matches.push(...cis.map(ci => [this.rowChars[ci], gem.column+1]))
+    const ci = this.colChars.indexOf(char)
+    const cis = this.checkArrayMatch(this.getRow(ri), ci)
+    if (cis) matches.push(...cis.map(i => [ri + 1, this.colChars[i]]))
 
     return matches;
   }
 
   checkGridMatches() {
-    let matches = []
+    let matches = new Set()
 
-    this.rowChars.forEach((rowChar, ri) => {
-      this.colNums.forEach((colNum, ci) => {
-        const currentMatches = this.checkRowColMatches(ri, ci)
-        if (currentMatches) matches.push(...currentMatches)
-      })
+    this.colChars.forEach((char) => {
+      for (let ri = 0; ri < this.rowCount; ri++) {
+        const currentMatches = this.checkRowColMatches(char, ri)
+        if (currentMatches) currentMatches.forEach(match=>matches.add(match))
+      }
     })
-
-    console.log("matches", matches)
-    if (matches.length) return matches
+    if (matches.size) return Array.from(matches)
     else return false
   }
-  
-  static dropColumnGems(column) {
-    // loop column
-    // if spot is empty, 
-    
-    // From bottom, if there is no gem, check next slot until you find a gem
-    // move gem to empty slot
-    // Continue until end of column.
-    // Randomize gems to fill empty spots
-    //
-    //
-    // const column = 
-    
+
+  removeGems(coords) {
+    coords.forEach(coord => {
+      const num = coord[0] - 1
+      const char = coord[1]
+      this.grid[char][num] = null;
+    })
   }
-  
-  getGemAt(rowIndex, colIndex) {
-    return this.columns[colIndex][rowIndex]
+
+  addGems(column) {
+    while (column.length < this.rowCount) {
+      column.unshift(this.gems[Math.floor(Math.random() * this.gems.length)])
+    }
+    return column
   }
-  
-  swapGems(gemA, gemB) {
-    this.columns[colIndexA][rowIndexA] = 
-    this.columns[colIndexB][rowIndexB] = 
+
+  updateBoardGems(matches) {
+    this.removeGems(matches)
+    Object.keys(this.grid).map(char => {
+      this.grid[char] = this.grid[char].filter(gem => gem !== null);
+      this.addGems(this.grid[char])
+    })
   }
-  
+
   swapGems(coordA, coordB) {
-    const newGrid = [...this.columns]
-    const gemA = this.getGemAt(coordA[1], coordA[0])
-    const gemB = this.getGemAt(coordB[1], coordB[0])
-    [this.columns[]]
-    gemA.swapWithGem(gemB);
+    const newGrid = { ...this.grid }
+    const [ra, ca, rb, cb] = [...coordA, ...coordB]
+    const gemA = newGrid[ca][ra - 1]
+    const gemB = newGrid[cb][rb - 1]
+    newGrid[ca][ra - 1] = gemB;
+    newGrid[cb][rb - 1] = gemA;
     const matches = this.checkGridMatches()
     if (matches) {
-      this.columns = newGrid;
+      this.grid = newGrid;
       return matches
     }
     return false;
   }
-  
+
   verifyAdjacency(coordA, coordB) {
     // calculate the 2-4 adjacent coords for coordA
     // check if coordB is in
+    if (coordA.join("") === coordB.join("")) return false;
+    const aIndex = this.colChars.indexOf(coordA[1])
+    let adjacentChars = coordA[1]
+    const adjacentNums = [coordA[0], coordA[0]+1, coordA[0]-1]
+    if (aIndex > 0) adjacentChars += this.colChars[aIndex-1]
+    if (aIndex < this.colChars.length-1) adjacentChars += this.colChars[aIndex+1]
+    console.log("chars", adjacentChars, coordA, coordB)
     
-    
-    
-    // Get -1 and +1
-    const charIndex = this.rowChars.indexOf(coordA[0])
+    if (!adjacentChars.includes(coordB[1])) {
+      console.log("not adjacent char")
+      return false;
+    }
+    if (!adjacentNums.includes(coordB[0])) {
+      console.log("not adjacent number")
+      return false;
+    }
+    return true;
   }
-  
-  
-
-  // Iterate through rows-columns
-  // For every iteration, count from current spot forward in row. If 3+, note it
-  // Count downward in column. If 3+, note it.
-  // Collect all 'matching' coords in an array
-  // At the end, return all matching coords. If no matches, return false
-  // Stop iterations 2 before the end.
 }
 
-
-
 module.exports = Board;
+
+
+// TODO
+// Cancel unadjacent inputs with msg
+// Cancel inputs that don't result in a match with msg
+// Calculate score and auto-update with auto-combos
+// Check if no valid swaps are possible - game over

@@ -34,12 +34,13 @@ const rl = readline.createInterface({
 const Board = require("./board")
 
 const fruit = "🍇🍈🍉🍊🍋🍌🍍🥭🍎🍐🍑🍒🍓🥝🥥"
+const nums = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
 
 
 class Bejeweled {
-  constructor(rows, columns, score = 0) {
-    this.score = score;
+  constructor(rows, columns) {
     this.board = new Board(rows, columns)
+    this.score = 0;
   }
 
   startGame() {
@@ -51,34 +52,63 @@ class Bejeweled {
       2. Create a row or column of three or more matching gems.
       3. Raise your high score until there are no more combinations.
     `)
+
+    this.promptUser();
   }
 
   promptUser() {
-    rl.question("> What gems would you like to swap? Input coordinates (ex. A1,A2): ",
+    this.showScore()
+    this.showBoard()
+
+    rl.question("> What gems would you like to swap? Input coordinates (ex. 1A,2A): ",
       (reply) => {
-        const coords = this.verifyInputCoords(reply)
-        console.log(coords)
-        rl.close()
+
+        if (reply.includes("q")) {
+          rl.close();
+        } else {
+          const coords = this.verifyInputCoords(reply)
+          if (!coords) {
+            console.log("OOPS! That input's no good.")
+          } else {
+
+            const isAdjacent = this.board.verifyAdjacency(coords[0], coords[1])
+            const makesCombo = this.board.swapGems(coords[0], coords[1])
+
+            if (!isAdjacent) {
+              console.log("OOPS! Inputs must be adjacent.")
+
+            } else if (!makesCombo) {
+              console.log("OOP! Inputs don't make any combos.")
+
+            } else {
+              this.showMatches();
+              this.updateScore();
+            }
+          }
+          this.promptUser()
+        }
+
       })
   }
 
   verifyInputCoords(userInput) {
     if (!userInput.includes(",")) return false;
-    const coords = userInput.split(",").map(coord => [coord[0].toUpperCase(), Number(coord[1])])
-    const rowChars = this.board.rowChars
-    const colNums = this.board.colNums.length
-    console.log("coords", coords)
+    const coords = userInput.split(",").map(coord => [Number(coord[0]), coord[1].toUpperCase()])
+    const colChars = this.board.colChars
+    const rowNums = this.board.rowCount.length
     if (
-      !rowChars.includes(coords[0][0])
-      || !rowChars.includes(coords[1][0])
-      || coords[0][1] > colNums
-      || coords[1][1] > colNums
-      || Number.isNaN(coords[0][1])
-      || Number.isNaN(coords[1][1])
+      // Check if coords have valid chars
+      !colChars.includes(coords[0][1])
+      || !colChars.includes(coords[1][1])
+      // Check if coords have valid nums
+      || coords[0][0] > rowNums
+      || coords[1][0] > rowNums
+      || Number.isNaN(coords[0][0])
+      || Number.isNaN(coords[1][0])
     ) {
       return false;
     }
-    
+
     return coords;
   }
 
@@ -87,22 +117,33 @@ class Bejeweled {
   }
 
   showBoard() {
-    console.log("      " + this.board.colNums.join("  "));
-
-    this.board.rowChars.map((rowChar, ri) => {
-      console.log("    " + rowChar + " " + this.board.getRow(ri).join(" "))
-    })
-    this.board.checkGridMatches()
+    console.log("       " + this.board.colChars.join("  "));
+    for (let i = 0; i < this.board.rowCount; i++) {
+      console.log("    " + (i + 1) + " " + this.board.getRow(i).join(" "))
+    }
+    this.showMatches()
+    console.log("\n")
   }
 
-  renderGUI() {
-    this.showScore()
-    this.showBoard()
-    this.promptUser()
+  showMatches() {
+    const matches = this.board.checkGridMatches()
+    if (matches) {
+      let comboMsg = "\nCombo! ";
+      matches.forEach(match => comboMsg += `${match[0]}${match[1]} `)
+      console.log(comboMsg)
+    }
+  }
+
+  updateScore() {
+    const matches = this.board.checkGridMatches()
+    if (matches) {
+      this.score += matches.length;
+      this.board.updateBoardGems(matches)
+    }
   }
 
 }
 
+
 const bejeweled = new Bejeweled(8, 8)
 bejeweled.startGame()
-bejeweled.renderGUI()
