@@ -26,6 +26,7 @@ const other = "🌰 🍞 🥐 🥖 🧀 🍖 🍗 🥩 🥓 🥚 🦪 ";
  const zodiac = "🐒 🐕 🐅 🐎 🐂 🐖 🐑 🐀 🐇 🐓 🐍 🐉";
 const plants = "💐 🌸 🌹 🌺 🌻 🌼 🌷 🌱 🌲 🌳 🌴 🌵 🌾 🌿 ☘️ 🍀 🍁 🍂 🍄";
 
+// + pie, lollipop, ice_cream, chocolate, doughnut
 
 const bejeweled = new BejeweledUI(
   rows = numbers,
