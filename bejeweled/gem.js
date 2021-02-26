@@ -1,32 +1,31 @@
 
+class PowerGem extends Gem {
+  constructor(row, column, char, value) {
+    super(row, column, char, value);
+    this
+  }
+  
+  zapRow(board) {
+    const row = board.getRow(this.row);
+    board.updateBoardGems(row)
+  }
+  
+  zapColumn(board) {
+    board.updateBoardGems(board.grid[this.column])
+  }
+  
+  zapAlike(board) {}
+  
+}
+
 class Gem {
-  constructor(row, column, gem, board) {
+  constructor(row, column, char, value) {
     this.row = row;
     this.column = column;
-    this.gem = gem;
-    this.board = board;
-    this.adjacentCoords = this.setAdjacentCoords()
+    this.value = value;
+    this.char = char;
   }
-  
-  setAdjacentCoords() {
-    const adjacentCoords = []
-    const rowChars = this.board.rowChars
-    
-    if (this.row > 0) {
-      adjacentCoords.push([rowChars[this.row-1], this.column])
-    }
-    if (this.row < rowChars.length-2) {
-      adjacentCoords.push([rowChars[this.row+1], this.column])
-    }
-    if (this.column > 0) {
-      adjacentCoords.push([this.row, this.column-1])
-    }
-    if (this.column < this.board.columns.length-2) {
-      adjacentCoords.push([this.row, this.column+1])
-    }
-    return adjacentCoords;
-  }
-  
+
   dropToRow(row) {
     this.row = row;
   }
@@ -40,7 +39,7 @@ class Gem {
   checkMatch(arr, i) {
     const matches = []
     let count = 1;
-    while (this.gem === arr[i + count]) {
+    while (this.char === arr[i + count]) {
       matches.push(i + count);
       count++;
     }
