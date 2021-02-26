@@ -1,6 +1,6 @@
 # mod2-refactor-projects
 
-- [Issue #2034](https://github.com/appacademy/Modular-Curriculum/issues/2034) => [solutions here](./dry-refactor)
+- [Issue #2034](https://github.com/appacademy/Modular-Curriculum/issues/2034) => [solutions here](./refactor-project)
 - [Issue #2036](https://github.com/appacademy/Modular-Curriculum/issues/2036) => [solutions here](./shelter-solution)
 - [Issue #2037](https://github.com/appacademy/Modular-Curriculum/issues/2037) => [solutions here]()
 - [Issue #2038](https://github.com/appacademy/Modular-Curriculum/issues/2038) => [solutions here](./tic-tac-toe-solution)
